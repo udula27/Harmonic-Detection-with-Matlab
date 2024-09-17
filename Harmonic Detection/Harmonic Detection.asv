@@ -1,0 +1,135 @@
+load('signal11.mat','xn_test');
+
+%dviding xn_test into subsamples
+S1 = xn_test(1:129);
+S2 = xn_test(1:257);
+S3 = xn_test(1:513);
+S4 = xn_test(1:1025);
+S5 = xn_test(1:1793);
+
+% Apply DFT to each subsample
+dft_S1 = fftshift(fft(S1));
+dft_S2 = fftshift(fft(S2));
+dft_S3 = fftshift(fft(S3));
+dft_S4 = fftshift(fft(S4));
+dft_S5 = fftshift(fft(S5));
+
+fs = 128;
+
+% Length of each subset
+N1 = length(S1);
+N2 = length(S2);
+N3 = length(S3);
+N4 = length(S4);
+N5 = length(S5);
+% Compute the DFT for each subset
+
+% Compute the frequency axes for plotting
+freq1 = linspace(-fs/2, fs/2, N1);
+freq2 = linspace(-fs/2, fs/2, N2);
+freq3 = linspace(-fs/2, fs/2, N3);
+freq4 = linspace(-fs/2, fs/2, N4);
+freq5 = linspace(-fs/2, fs/2, N5);
+
+figure('Position', [100, 100, 1000, 300]);
+%S1
+
+stem(freq1,abs(dft_S1));
+title('DFT of S1');
+xlabel('frequency');
+ylabel('Amplitude');
+
+
+%S2
+figure('Position', [100, 100, 1000, 300]);
+
+stem(freq2,abs(dft_S2));
+title('DFT of S2');
+xlabel('frequency');
+ylabel('Amplitude');
+
+
+%S3
+figure('Position', [100, 100, 1000, 300]);
+
+stem(freq3,abs(dft_S3));
+title('DFT of S3');
+xlabel('frequency');
+ylabel('Amplitude');
+
+%S4
+
+figure('Position', [100, 100, 1000, 300]);
+stem(freq4,abs(dft_S4));
+title('DFT of S4');
+xlabel('frequency');
+ylabel('Amplitude');
+
+%S5
+figure('Position', [100, 100, 1000, 300]);
+
+stem(freq5,abs(dft_S5));
+title('DFT of S5');
+xlabel('frequency');
+ylabel('Amplitude');
+
+total_samples = length(xn_test);
+L = 14;
+K = floor(total_samples / L);
+i = 1; j = K;
+mean_dft = 0;
+
+for n = 1:L
+    subset = xn_test(i:j);
+    dft_magnitude = abs(fft(subset, K));
+    mean_dft = mean_dft + dft_magnitude;
+    
+    i = j+1;
+    j = j+K;
+end
+
+mean_dft = mean_dft / L;
+
+% Plot the magnitude for the current subset
+subplot(1, 2, 1);
+plot(mean_dft);
+title('Mean of DFT Sequences (Line Plot)');
+xlabel('Frequency (Hz)');
+grid on;
+subplot(1, 2, 2);
+stem(mean_dft);
+title('Mean of DFT Sequences (Stem Plot)');
+xlabel('Frequency (Hz)');
+grid on;
+
+% 
+% k = 128;
+% L = 14;
+% N = length ( x ) ;
+% %L=14
+% sum_dft = zeros (1 , k ) ;
+% for i = 1: L
+%     sub_x = x (( i -1) * k +1: i * k ) ;
+%     dft_sub_x = fft( sub_x ) ;
+%     sum_dft = sum_dft + dft_sub_x ;
+% end
+
+% avg_dft = sum_dft / L ; % Use the correct index variable for
+% 
+% % Plot in a 2x7 grid
+% figure('Position', [100 , 100 , 1000 , 300]);
+% stem(abs( avg_dft ));
+% title('Average DFT');
+% xlim([0 ,64]);
+% xlabel('Frequency');
+% ylabel('Amplitude');
+
+
+
+
+
+
+
+
+
+
